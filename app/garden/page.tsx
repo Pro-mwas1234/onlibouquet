@@ -1,3 +1,21 @@
+export default async function AllBouquetsPage() {
+  const { data, error } = await supabase
+    .from("bouquets")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  // Log the real error
+  if (error) {
+    console.error("Supabase error:", error);
+    return <div>Error: {error.message}</div>; // 👈 shows real message
+  }
+  if (!data) {
+    return <div>No data returned</div>;
+  }
+
+  // ... rest of component
+}
+
 // app/bouquet/page.tsx
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
