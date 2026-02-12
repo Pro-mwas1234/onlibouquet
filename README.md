@@ -1,8 +1,8 @@
-# 🌸 DigiBouquet
+# 🌸OnliBouquet
 
 > Beautiful flowers delivered digitally to ur loved ones
 
-DigiBouquet allows users to create personalized digital flower bouquets with meaningful messages. Choose from a curated selection of flowers, each with their own symbolic meanings and birth month associations, to create beautiful bouquets that can be shared digitally.
+onliBouquet allows users to create personalized online flower bouquets with meaningful messages. Choose from a curated selection of flowers, each with their own symbolic meanings and birth month associations, to create beautiful bouquets that can be shared digitally.
 
 ## ✨ Features
 
@@ -47,7 +47,7 @@ DigiBouquet allows users to create personalized digital flower bouquets with mea
 
    ```bash
    git clone <repository-url>
-   cd digibouquet
+   cd onlibouquet
    ```
 
 2. **Install dependencies**
@@ -74,7 +74,7 @@ DigiBouquet allows users to create personalized digital flower bouquets with mea
 ## 📁 Project Structure
 
 ```
-digibouquet/
+Onlibouquet/
 ├── app/                      # Next.js App Router pages
 │   ├── bouquet/             # Bouquet creation and viewing
 │   ├── garden/              # Garden view page
