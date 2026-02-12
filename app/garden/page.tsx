@@ -8,10 +8,10 @@ export default async function AllBouquetsPage() {
   const { data, error } = await supabase
     .from("bouquets")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false }); // optional: sort by latest
 
   if (error || !data) {
-    return <div className="text-center p-6">Error fetching bouquets.</div>;
+    return <div>Error fetching bouquets.</div>;
   }
 
   return (
@@ -27,19 +27,23 @@ export default async function AllBouquetsPage() {
         />
       </Link>
 
-      <h2 className="text-md uppercase mb-4">OUR GARDEN</h2>
+      {/* Page title */}
+      <h2 className="text-md uppercase mb-4 ">OUR GARDEN</h2>
       <p className="text-sm opacity-50 mb-10">Thanks for stopping by!</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
         {data.map((bouquet) => (
-          <div key={bouquet.id} className="flex flex-col items-center">
-            <div className="mb-4">
+          //   <Link href={`/bouquet/${bouquet.id}`} key={bouquet.id}>
+          <div>
+            <div>
               <BouquetOnly bouquet={bouquet} />
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 m-10">
               {new Date(bouquet.created_at).toLocaleDateString()}
             </p>
           </div>
+
+          //   </Link>
         ))}
       </div>
     </div>
