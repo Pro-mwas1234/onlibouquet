@@ -13,8 +13,6 @@ export default async function AllBouquetsPage() {
     return <div>No data returned</div>;
   }
 
-  // ... rest of component
-}
 
 // app/bouquet/page.tsx
 import { supabase } from "@/lib/supabase";
@@ -66,4 +64,5 @@ export default async function AllBouquetsPage() {
       </div>
     </div>
   );
+};
 }
