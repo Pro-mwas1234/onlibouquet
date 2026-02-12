@@ -40,12 +40,12 @@ export default async function BouquetPage(props: Params) {
       <h2 className="text-lg mb-14 ">Hi, I made this bouquet for you!</h2>
       <Bouquet bouquet={data} />
       <p className="text-sm text-gray-500">
-        made with digibouquet, a tool by{" "}
+        made with Onlibouquet, a tool by{" "}
         <Link
-          href="https://x.com/pau_wee_"
+          href="https://instagram.com/de._.hacker"
           className="text-sm underline text-gray-500 mt-2"
         >
-          @pau_wee_
+          @Mwask
         </Link>
       </p>
       <Link href="/" className="text-sm underline text-gray-500 mt-2">
