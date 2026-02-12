@@ -5,10 +5,11 @@ import Link from "next/link";
 import BouquetOnly from "../../components/bouquet/BouquetOnly";
 
 export default async function AllBouquetsPage() {
+  // Fetch all bouquets, ordered by created_at (newest first)
   const { data, error } = await supabase
     .from("bouquets")
     .select("*")
-    .order("created_at", { ascending: false }); // optional: sort by latest
+    .order("created_at", { ascending: false });
 
   if (error || !data) {
     return <div>Error fetching bouquets.</div>;
