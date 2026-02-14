@@ -1,3 +1,4 @@
+// app/stages/ShareBouquet.tsx (or wherever it lives)
 import Image from "next/image";
 import { flowers } from "../../data/data";
 import { supabase } from "@/lib/supabase";
@@ -9,7 +10,7 @@ import type { Bouquet as BouquetType } from "@/types/bouquet";
 
 export default function ShareBouquet() {
   const { bouquet } = useBouquet();
-  // Helper function to get flower dimensions based on size
+
   const getFlowerDimensions = (size: string) => {
     switch (size) {
       case "small":
@@ -17,7 +18,7 @@ export default function ShareBouquet() {
       case "large":
         return 160;
       default:
-        return 120; // medium
+        return 120;
     }
   };
 
@@ -25,6 +26,13 @@ export default function ShareBouquet() {
 
   const handleCreateBouquet = async (bouquet: BouquetType) => {
     const short_id = nanoid(8);
+
+    // 🔒 Fix: Ensure greenery is a proper boolean
+    const cleanGreenery =
+      bouquet.greenery === true ||
+      bouquet.greenery === "true" ||
+      bouquet.greenery === 1 ||
+      bouquet.greenery === "1";
 
     const { data, error } = await supabase
       .from("bouquets")
@@ -35,19 +43,18 @@ export default function ShareBouquet() {
           flowers: bouquet.flowers,
           letter: bouquet.letter,
           timestamp: bouquet.timestamp,
-          greenery: bouquet.greenery,
+          greenery: cleanGreenery, // ✅ Now always boolean
           flowerOrder: bouquet.flowerOrder,
         },
       ])
-      .select(); // returns inserted row(s)
+      .select();
 
     if (error || !data || data.length === 0) {
       console.error("Error creating bouquet:", error);
       return;
     }
 
-    const bouquetId = data[0].id;
-    router.push(`/bouquet/${bouquetId}`);
+    router.push(`/bouquet/${data[0].id}`);
   };
 
   return (
