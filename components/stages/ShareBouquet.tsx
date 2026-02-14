@@ -1,6 +1,5 @@
-// app/stages/ShareBouquet.tsx (or wherever it lives)
+// app/stages/ShareBouquet.tsx
 import Image from "next/image";
-import { flowers } from "../../data/data";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { nanoid } from "nanoid";
@@ -11,6 +10,7 @@ import type { Bouquet as BouquetType } from "@/types/bouquet";
 export default function ShareBouquet() {
   const { bouquet } = useBouquet();
 
+  // Helper function to get flower dimensions based on size
   const getFlowerDimensions = (size: string) => {
     switch (size) {
       case "small":
@@ -18,7 +18,7 @@ export default function ShareBouquet() {
       case "large":
         return 160;
       default:
-        return 120;
+        return 120; // medium
     }
   };
 
@@ -27,12 +27,13 @@ export default function ShareBouquet() {
   const handleCreateBouquet = async (bouquet: BouquetType) => {
     const short_id = nanoid(8);
 
-    // 🔒 Fix: Ensure greenery is a proper boolean
+    // ✅ Safely normalize greenery to boolean (fixes "2" error + TS compile)
+    const rawGreenery: unknown = bouquet.greenery;
     const cleanGreenery =
-      bouquet.greenery === true ||
-      bouquet.greenery === "true" ||
-      bouquet.greenery === 1 ||
-      bouquet.greenery === "1";
+      rawGreenery === true ||
+      rawGreenery === "true" ||
+      rawGreenery === 1 ||
+      rawGreenery === "1";
 
     const { data, error } = await supabase
       .from("bouquets")
@@ -43,18 +44,19 @@ export default function ShareBouquet() {
           flowers: bouquet.flowers,
           letter: bouquet.letter,
           timestamp: bouquet.timestamp,
-          greenery: cleanGreenery, // ✅ Now always boolean
+          greenery: cleanGreenery, // 👈 now guaranteed boolean
           flowerOrder: bouquet.flowerOrder,
         },
       ])
-      .select();
+      .select(); // returns inserted row(s)
 
     if (error || !data || data.length === 0) {
       console.error("Error creating bouquet:", error);
       return;
     }
 
-    router.push(`/bouquet/${data[0].id}`);
+    const bouquetId = data[0].id;
+    router.push(`/bouquet/${bouquetId}`);
   };
 
   return (
