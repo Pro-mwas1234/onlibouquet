@@ -1,11 +1,16 @@
 // app/stages/ShareBouquet.tsx
+"use client";
+
 import Image from "next/image";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { nanoid } from "nanoid";
 import Bouquet from "../bouquet/Bouquet";
 import { useBouquet } from "../../context/BouquetContext";
 import type { Bouquet as BouquetType } from "@/types/bouquet";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export default function ShareBouquet() {
   const { bouquet } = useBouquet();
@@ -35,6 +40,7 @@ export default function ShareBouquet() {
       rawGreenery === 1 ||
       rawGreenery === "1";
 
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
     const { data, error } = await supabase
       .from("bouquets")
       .insert([

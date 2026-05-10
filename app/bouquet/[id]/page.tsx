@@ -1,24 +1,53 @@
 // app/bouquet/[id]/page.tsx
-import { supabase } from "@/lib/supabase"; // we'll make this below
+"use client";
+
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+import { useParams } from "next/navigation";
 import Bouquet from "../../../components/bouquet/Bouquet";
 import Image from "next/image";
 import Link from "next/link";
 
-interface Params {
-  params: Promise<{
-    id: string;
-  }>;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+interface BouquetData {
+  id: string;
+  [key: string]: any;
 }
 
-export default async function BouquetPage(props: Params) {
-  const params = await props.params;
-  const { id } = params;
+export default function BouquetPage() {
+  const params = useParams();
+  const id = params.id as string;
+  const [data, setData] = useState<BouquetData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const { data, error } = await supabase
-    .from("bouquets")
-    .select()
-    .eq("id", id)
-    .single();
+  useEffect(() => {
+    const fetchBouquet = async () => {
+      try {
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        const { data, error } = await supabase
+          .from("bouquets")
+          .select()
+          .eq("id", id)
+          .single();
+
+        if (error) throw error;
+        setData(data || null);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBouquet();
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (error || !data) {
     return <div>404 - Bouquet not found</div>;

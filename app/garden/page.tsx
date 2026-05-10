@@ -1,18 +1,53 @@
 // app/garden/page.tsx
-import { supabase } from "@/lib/supabase";
+"use client";
+
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
 import BouquetOnly from "../../components/bouquet/BouquetOnly";
 
-export default async function AllBouquetsPage() {
-  // Fetch all bouquets, ordered by created_at (newest first)
-  const { data, error } = await supabase
-    .from("bouquets")
-    .select("*")
-    .order("created_at", { ascending: false });
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+interface Bouquet {
+  id: string;
+  created_at: string;
+  [key: string]: any;
+}
+
+export default function AllBouquetsPage() {
+  const [data, setData] = useState<Bouquet[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBouquets = async () => {
+      try {
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        const { data, error } = await supabase
+          .from("bouquets")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+        setData(data || []);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBouquets();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (error || !data) {
-    return <div>Error fetching bouquets.</div>;
+    return <div>Error fetching bouquets: {error}</div>;
   }
 
   return (

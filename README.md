@@ -1,99 +1,78 @@
-# 🌸OnliBouquet
+# Onlibouquet - Digital Flower Bouquet Creator
 
-> Beautiful flowers delivered digitally to ur loved ones
+A Next.js application that lets users create and share digital flower bouquets.
 
-onliBouquet allows users to create personalized online flower bouquets with meaningful messages. Choose from a curated selection of flowers, each with their own symbolic meanings and birth month associations, to create beautiful bouquets that can be shared digitally.
-
-## ✨ Features
-
-- **🌺 Flower Selection**: Choose from 12 different flowers, each with unique meanings:
-
-  - 🌹 Rose (Love and passion) - June
-  - 🌷 Tulip (Perfect love) - April
-  - 🌸 Peony (Romance) - May
-  - 🌻 Sunflower (Adoration) - August
-  - 🌺 Orchid (Beauty) - October
-  - 💐 Dahlia (Elegance) - August
-  - 🌼 Daisy (Innocence) - April
-  - 🌾 Lily (Purity) - May
-  - 🌟 Anemone (Anticipation) - September
-  - 🌿 Carnation (Fascination) - January
-  - ⭐ Zinnia (Lasting Affection) - July
-  - 🎪 Ranunculus (Radiant Charm) - March
-
-- **📝 Personal Messages**: Add custom cards with sender, recipient, and personalized messages
-
-- **🏡 Garden View**: Browse previously created bouquets
-- **🔗 Shareable Links**: Each bouquet gets a unique URL for easy sharing
-
-## 🛠️ Tech Stack
-
-- **Framework**: [Next.js 14](https://nextjs.org/) with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Database**: Supabase
-- **UI Components**: Shadcn UI
-
-## 🚀 Getting Started
+## Deploy to Cloudflare Pages
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm
+1. A [Cloudflare account](https://dash.cloudflare.com/sign-up)
+2. A [Supabase project](https://supabase.com) (or your preferred backend)
 
-### Installation
+### Setup Instructions
 
-1. **Clone the repository**
+#### 1. Configure Environment Variables
 
-   ```bash
-   git clone <repository-url>
-   cd onlibouquet
-   ```
+In your Cloudflare Pages dashboard, go to **Settings** → **Environment Variables** and add:
 
-2. **Install dependencies**
+- `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anonymous key
 
-   ```bash
-   pnpm install
-   ```
+#### 2. Connect to Git
 
-3. **Set up environment variables**
+1. Go to the [Cloudflare Pages dashboard](https://dash.cloudflare.com/?to=/:account/pages)
+2. Click **Create a project**
+3. Select **Connect to Git**
+4. Choose your repository
+5. Configure build settings:
+   - **Framework preset**: Next.js
+   - **Build command**: `pnpm run build` (or `npm run build` / `yarn build`)
+   - **Build output directory**: `out`
 
-   Create a `.env.local` file in the root directory:
+#### 3. Deploy
 
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
+Cloudflare Pages will automatically build and deploy your site on every push to the connected branch.
 
-4. **Run the development server**
+### Local Development
 
-   ```bash
-   pnpm dev
-   ```
+```bash
+# Install dependencies
+pnpm install
 
-## 📁 Project Structure
+# Copy environment variables template
+cp .env.local.example .env.local
 
-```
-Onlibouquet/
-├── app/                      # Next.js App Router pages
-│   ├── bouquet/             # Bouquet creation and viewing
-│   ├── garden/              # Garden view page
-│   └── layout.tsx           # Root layout
-├── components/              # React components
-│   ├── bouquet/            # Bouquet display components
-│   ├── stages/             # Creation flow stages
-│   └── ui/                 # Reusable UI components
-├── context/                # React Context providers
-├── data/                   # Static data (flowers, meanings)
-├── lib/                    # Utility functions
-├── types/                  # TypeScript type definitions
-├── public/                 # Static assets
-│   ├── color/              # Color flower images
-│   ├── mono/               # Black & white images
-│   └── full/               # Full resolution images
-└── styles/                 # Global styles
+# Edit .env.local with your Supabase credentials
+
+# Run development server
+pnpm dev
 ```
 
----
+### Build for Production
 
-_Create meaningful digital bouquets that bloom forever_ 🌺
+```bash
+pnpm build
+```
+
+The static files will be generated in the `out` directory.
+
+## Project Structure
+
+- `/app` - Next.js App Router pages
+- `/components` - React components
+- `/context` - React context providers
+- `/lib` - Utility functions and Supabase client
+- `/public` - Static assets
+
+## Technologies
+
+- Next.js 15 (Static Export mode)
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Supabase (Backend)
+- Cloudflare Pages (Hosting)
+
+## License
+
+MIT
